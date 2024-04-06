@@ -1,0 +1,102 @@
+#instance name
+nucleus-jumphost-874
+
+# app port 
+8081
+
+#firewall rule
+allow-tcp-rule-102
+
+# default region
+us-west3
+
+#default zone 
+us-west3-a
+
+gcloud config set compute/zone us-east1-b
+
+gcloud config set compute/region us-east1
+
+export INSTANCE_NAME=nucleus-jumphost-874
+
+export FIREWALL_NAME=allow-tcp-rule-764
+
+export REGION=us-east1
+
+export PORT=8082
+
+export ZONE=us-east1-b
+
+echo $FIREWALL_NAME, $REGION, $ZONE, $PORT
+
+gcloud compute instances create $INSTANCE_NAME \
+          --network default \
+          --zone $ZONE  \
+          --machine-type e2-micro  \
+          --image-family debian-11  \
+          --image-project debian-cloud 
+
+
+# First create the load balancer template:
+gcloud compute instance-templates create nucleus-web-template \
+   --region=$REGION \
+   --network=default \
+   --subnet=default \
+   --tags=allow-health-check \
+   --machine-type=e2-medium \
+   --image-family=debian-11 \
+   --image-project=debian-cloud \
+   --metadata-from-file startup-script=startup.sh
+
+# Create a managed instance group based on the template:
+gcloud compute instance-groups managed create nucleus-web-servers \
+   --template=nucleus-web-template --size=2 --zone=$ZONE
+
+# Create the fw-allow-health-check firewall rule.
+gcloud compute firewall-rules create $FIREWALL_NAME \
+  --network=default \
+  --action=allow \
+  --direction=ingress \
+  --source-ranges=130.211.0.0/22,35.191.0.0/16 \
+  --target-tags=allow-health-check \
+  --rules=tcp:80
+
+# Now that the instances are up and running, set up a global static external IP address that your customers use to reach your load balancer:
+gcloud compute addresses create lb-ipv4-1 --ip-version=IPV4 --global
+
+# Note the IPv4 address that was reserved:
+gcloud compute addresses describe lb-ipv4-1 --format="get(address)" --global
+
+# Create a health check for the load balancer:
+gcloud compute health-checks create http http-basic-check --port 80
+
+#  Create a backend service:
+gcloud compute backend-services create web-backend-service \
+  --protocol=HTTP \
+  --port-name=http \
+  --health-checks=http-basic-check \
+  --global
+
+# Add your instance group as the backend to the backend service:
+gcloud compute backend-services add-backend web-backend-service \
+  --instance-group=nucleus-web-servers \
+  --instance-group-zone=$ZONE \
+  --global
+
+# Create a URL map to route the incoming requests to the default backend service:
+gcloud compute url-maps create web-map-http --default-service web-backend-service
+
+# Create a target HTTP proxy to route requests to your URL map:
+gcloud compute target-http-proxies create http-lb-proxy --url-map web-map-http
+
+# Create a global forwarding rule to route incoming requests to the proxy:
+gcloud compute forwarding-rules create http-content-rule \
+   --address=lb-ipv4-1\
+   --global \
+   --target-http-proxy=http-lb-proxy \
+   --ports=80
+
+# create a named port for the manged group
+gcloud compute instance-groups managed set-named-ports nucleus-web-servers \
+  --named-ports http:80 \
+  --zone=$ZONE
