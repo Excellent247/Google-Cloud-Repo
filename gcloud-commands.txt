@@ -2,7 +2,7 @@ gcloud commands are built with groups and subgroups, followed
 by a command, which is a verb.
 
 Examples:
-1. gcloud compute snapshot list" Compute is the Group, snapshots is the subgroup, and list is the command.
+gcloud compute snapshot list" Compute is the Group, snapshots is the subgroup, and list is the command.
 
 To list snapshots run the following command:
 gcloud compute snapshots list --project PROJECT_ID
@@ -20,45 +20,45 @@ Flags available
 --quiet disables interactive prompts
 
 COMMON GCLOUD COMMANDS 
-# You can list the active account name with this command
+#You can list the active account name with this command
 gcloud auth list
 
-# list the project ID with this command
+#list the project ID with this command
 gcloud config list projects
 
-# Set the region to <REGION>
+#Set the region to <REGION>
 gcloud config get-value compute/region <zone>
 
-# Set the region to <ZONE>
+#Set the region to <ZONE>
 gcloud config get-value compute/region <zone>
 
-# To view the project zone setting, run the following command:
+#To view the project zone setting, run the following command:
 gcloud config get-value compute/zone
 
-# In Cloud Shell, run the following gcloud command, to view the project id for your project:
+#In Cloud Shell, run the following gcloud command, to view the project id for your project:
 gcloud config get-value project
 
-# In Cloud Shell, run the following gcloud command to view details about the project:
+#In Cloud Shell, run the following gcloud command to view details about the project:
 gcloud compute project-info describe --project $(gcloud config get-value project)
 
-## Setting environment variables
+##Setting environment variables
 #Create an environment variable to store your Project ID:
 export PROJECT_ID=$(gcloud config get-value project)
 
-# Create an environment variable to store your Zone:
+#Create an environment variable to store your Zone:
 export ZONE=$(gcloud config get-value compute/zone)
 
-# To verify that your variables were set properly, run the following commands:
+#To verify that your variables were set properly, run the following commands:
 echo -e "PROJECT ID: $PROJECT_ID\nZONE: $ZONE"
 
-## config commands 
+##config commands 
 
 gcloud config --help
 gcloud config list
 gcloud config configurations list
 gcloud config list --all 
 
-## Compute commands 
+##Compute commands 
 gcloud components list
 gcloud compute instances list
 gcloud compute instances create gcelab3 --machine-type e2-medium --zone $ZONE
