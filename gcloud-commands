@@ -1,0 +1,70 @@
+gcloud commands are built with groups and subgroups, followed
+by a command, which is a verb.
+
+Examples:
+1. gcloud compute snapshot list" Compute is the Group, snapshots is the subgroup, and list is the command.
+
+To list snapshots run the following command:
+gcloud compute snapshots list --project PROJECT_ID
+Flags available
+--limit maximum number of results you want back
+--regexp a filter for results you want returned
+--sort-by field to sort by
+--uri only print URI’s of the resources returned
+To describe snapshots, which returns creation time, size, and source disk, run the
+following command:
+gcloud compute snapshots describe SNAPSHOT_NAME
+Flags available
+--format what kind of format you want printed out
+--project project to be used for command
+--quiet disables interactive prompts
+
+COMMON GCLOUD COMMANDS 
+# You can list the active account name with this command
+gcloud auth list
+
+# list the project ID with this command
+gcloud config list projects
+
+# Set the region to <REGION>
+gcloud config get-value compute/region <zone>
+
+# Set the region to <ZONE>
+gcloud config get-value compute/region <zone>
+
+# To view the project zone setting, run the following command:
+gcloud config get-value compute/zone
+
+# In Cloud Shell, run the following gcloud command, to view the project id for your project:
+gcloud config get-value project
+
+# In Cloud Shell, run the following gcloud command to view details about the project:
+gcloud compute project-info describe --project $(gcloud config get-value project)
+
+## Setting environment variables
+#Create an environment variable to store your Project ID:
+export PROJECT_ID=$(gcloud config get-value project)
+
+# Create an environment variable to store your Zone:
+export ZONE=$(gcloud config get-value compute/zone)
+
+# To verify that your variables were set properly, run the following commands:
+echo -e "PROJECT ID: $PROJECT_ID\nZONE: $ZONE"
+
+## config commands 
+
+gcloud config --help
+gcloud config list
+gcloud config configurations list
+gcloud config list --all 
+
+## Compute commands 
+gcloud components list
+gcloud compute instances list
+gcloud compute instances create gcelab3 --machine-type e2-medium --zone $ZONE
+gcloud compute firewall-rules list
+gcloud compute instances list
+gcloud compute instances list --filter="name=gcelab2"
+gcloud compute ssh gcelab2 --zone $ZONE
+gcloud compute instances add-tags gcelab2 --tags http-server,https-server
+gcloud compute firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
