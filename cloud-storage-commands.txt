@@ -1,0 +1,8 @@
+# create buckets using gsutil
+gsutil mb gs://<YOUR-BUCKET-NAME>
+
+# upload a file to the bucket
+gsutil cp <FILE-PATH> gs://YOUR-BUCKET-NAME
+
+# create a folder and upload upload image to it
+gsutil cp gs://YOUR-BUCKET-NAME/ada.jpg gs://YOUR-BUCKET-NAME/image-folder/
