@@ -6,3 +6,21 @@ gsutil cp <FILE-PATH> gs://YOUR-BUCKET-NAME
 
 # create a folder and upload upload image to it
 gsutil cp gs://YOUR-BUCKET-NAME/ada.jpg gs://YOUR-BUCKET-NAME/image-folder/
+
+# Use the gsutil ls command to list the contents of the bucket:
+gsutil ls gs://YOUR-BUCKET-NAME
+
+# Use the gsutil ls command, with the -l flag to get some details about the image file you uploaded to your bucket:
+gsutil ls -l gs://YOUR-BUCKET-NAME/ada.jpg
+
+# Use the gsutil acl ch command to grant all users read permission for the object stored in your bucket:
+gsutil acl ch -u AllUsers:R gs://YOUR-BUCKET-NAME/ada.jpg
+
+# To remove this permission, use the command:
+gsutil acl ch -d AllUsers gs://YOUR-BUCKET-NAME/ada.jpg
+
+# Use the gsutil rm command to delete an object - the image file in your bucket:
+gsutil rm gs://YOUR-BUCKET-NAME/ada.jpg
+
+# create a bucket using gcloud command 
+gcloud storage buckets create gs://my-fancy-bucket-project-12  --no-public-access-prevention --default-storage-class=standard --
