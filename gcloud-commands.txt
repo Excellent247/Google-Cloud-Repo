@@ -1,5 +1,4 @@
-gcloud commands are built with groups and subgroups, followed
-by a command, which is a verb.
+gcloud commands are built with groups and subgroups, followed by a command, which is a verb.
 
 Examples:
 gcloud compute snapshot list" Compute is the Group, snapshots is the subgroup, and list is the command.
@@ -11,8 +10,8 @@ Flags available
 --regexp a filter for results you want returned
 --sort-by field to sort by
 --uri only print URI’s of the resources returned
-To describe snapshots, which returns creation time, size, and source disk, run the
-following command:
+
+To describe snapshots, which returns creation time, size, and source disk, run the following command:
 gcloud compute snapshots describe SNAPSHOT_NAME
 Flags available
 --format what kind of format you want printed out
