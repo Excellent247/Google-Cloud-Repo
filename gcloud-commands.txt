@@ -68,3 +68,32 @@ gcloud compute instances list --filter="name=gcelab2"
 gcloud compute ssh gcelab2 --zone $ZONE
 gcloud compute instances add-tags gcelab2 --tags http-server,https-server
 gcloud compute firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+
+## Cloud function
+
+
+## Pub/sub
+# Run the following command to create a topic called myTopic:
+gcloud pubsub topics create myTopic
+# To see the list of topics you just created, run the following command:
+gcloud pubsub topics list
+# To delete a topic, run the command
+gcloud pubsub topics delete <topic_name>
+# Run the following command to create a subscription called mySubscription to topic myTopic:
+gcloud  pubsub subscriptions create --topic myTopic mySubscription
+# Run the following command to list the subscriptions to myTopic:
+gcloud pubsub topics list-subscriptions myTopic
+# To delete the Test1 and Test2 subscriptions. Run the following commands:
+gcloud pubsub subscriptions delete Test1 Test2
+# Run the following command to publish the message "hello" to the topic you created previously (myTopic):
+gcloud pubsub topics publish myTopic --message "Hello"
+# Run the following commands (replacing <YOUR NAME> with your name and <FOOD> with a food you like to eat):
+gcloud pubsub topics publish myTopic --message "Publisher's name is <YOUR NAME>
+gcloud pubsub topics publish myTopic --message "Publisher likes to eat <FOOD>
+gcloud pubsub topics publish myTopic --message "Publisher thinks Pub/Sub is awesome"
+# Use the following command to pull the messages you just published from the Pub/Sub topic:
+gcloud pubsub subscriptions pull mySubscription --auto-ack
+# To pull a subscriptions 
+gcloud pubsub subscriptions pull --auto-ack 
+# Run the pull command with the limit flag:
+gcloud pubsub subscriptions pull mySubscription --auto-ack --limit=3
